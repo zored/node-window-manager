@@ -199,6 +199,22 @@ Napi::String getWindowTitle(const Napi::CallbackInfo &info) {
   return Napi::String::New(env, "");
 }
 
+Napi::String getWindowRealName(const Napi::CallbackInfo &info) {
+    Napi::Env env{info.Env()};
+
+    int handle = info[0].As<Napi::Number>().Int32Value();
+
+    auto wInfo = getWindowInfo(handle);
+
+    if (wInfo) {
+        NSString *windowName = wInfo[(id)kCGWindowName];
+        return Napi::String::New(env, [windowName UTF8String]);
+    }
+
+    return Napi::String::New(env, "");
+    }
+
+
 Napi::Object getWindowBounds(const Napi::CallbackInfo &info) {
    Napi::Env env{info.Env()};
 
